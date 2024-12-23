@@ -1,0 +1,12 @@
+해결하고자 하는 문제: MTSP(Multiple Traveling Salesman Problem)
+
+접근 방법
+1. Greedy Algorithm
+ 1-1. standard(k=1)
+ 1-2. clustering(자동차 대수)
+ 1-3. greedy인데 시작점에서 각자 다른 가장 짧은 곳을 향하게
+2. k-opt
+3. Genetic Algorithm
+4. Simulated Annealing
+5. Ant Colony Optimization
+6. Tabu Search
