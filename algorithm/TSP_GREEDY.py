@@ -24,6 +24,8 @@ def tsp_greedy(dmat: np.ndarray) -> tuple[list, int | float]:
         dist += dmat[start, end]
         start = end
         i += 1
+
+    dist += dmat[start, 0]
     
     return path.tolist(), dist
 
@@ -57,5 +59,8 @@ def k_tsp_greedy(dmat: np.ndarray, k: int = 1) -> tuple[list, int | float]:
             continue
 
         break
+
+    for i in range(k):
+        distances[i] += dmat[start_point[i], 0]
     
     return pathes, distances

@@ -1,13 +1,13 @@
 import matplotlib.pyplot as plt
 
-COLORS = "bckgmwry"
+COLORS = "rgmcbykw"
 
 def draw_points(points: list[tuple], path: list[int], label: int):
     points = [points[point] for point in path]
     for point in points:
         plt.scatter(*point, marker='o', color=COLORS[label])
 
-def draw_path(points: list[tuple], path: list[int], distance: int, i: int):
+def draw_path(points: list[tuple], path: list[int], distance: int | float, i: int):
     path_x, path_y = list(), list()
     for point in path:
         path_x.append(points[point][0])
@@ -18,7 +18,7 @@ def draw_path(points: list[tuple], path: list[int], distance: int, i: int):
 
     plt.plot(path_x, path_y, linestyle='-', color=COLORS[i], label=f"cluster {i + 1} : {distance}")
 
-def draw_points_withPath(clusters: list[list[tuple]], pathes: list[list[int]], distances: list[int]):
+def draw_points_withPath(clusters: list[list[tuple]], pathes: list[list[int]], distances: list[int | float]):
     n = len(clusters)
 
     plt.figure()
