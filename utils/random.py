@@ -38,8 +38,9 @@ def make_random_distanceMatrix(
             if point not in points:
                 points.add(point)
                 break
-
-    clusters = k_means(np.array(list(points)), k)
+    
+    if k > 1: clusters = k_means(np.array(list(points)), k)
+    else: clusters = [np.array(list(points))]
     dmats = []
 
     for cluster in clusters:
