@@ -2,8 +2,8 @@ from utils.random import make_random_distanceMatrix
 from utils.draw import draw_points_withPath
 from algorithm.TSP_GREEDY import tsp_greedy, k_tsp_greedy
 from algorithm.TSP_kOPT import two_opt_sequentialChange, two_opt_randomChange, two_opt_FRLS, two_opt_FSLR
-from algorithm.TSP_GA import tsp_GeneticAlgorithm
-from algorithm.TSP_SA import simulated_annealing_inverseOp, simulated_annealing_swapOp, simulated_annealing_insertOp
+from algorithm.TSP_GA import tsp_genetic_algorithm
+from algorithm.TSP_SA import simulated_annealing_inverseOp, simulated_annealing_swapOp
 from typing import Callable
 from time import time
 
@@ -52,11 +52,12 @@ def main_tspGA(k: int):
 
     clusters, pathes, distances = list(), list(), list()
     for points, dmat in dmats:
-        path, dist = tsp_GeneticAlgorithm(
-            gen_size=64, ggap=0.2, mutation_probability=0.05,
-            dmat=dmat,
-            threshold=10, max_iter=1000,
-        ).run()
+        path, _ = tsp_greedy(dmat)
+        path, dist = tsp_genetic_algorithm(
+            dmat=dmat, path=path,
+            gen_size=256, ggap=0.1, mutation_probability=0.1,
+            threshold=10, max_iter=2000,
+        )
         clusters.append(points)
         pathes.append(path)
         distances.append(dist)
@@ -68,9 +69,7 @@ def main_tspSA(k: int, mode: str = "inverse"):
         case "inverse":
             SA_func = simulated_annealing_inverseOp
         case "swap":
-            raise NotImplementedError("만들기 졸라 힘드네 진짜.")
-        case "insert":
-            raise NotImplementedError("만들기 졸라 힘드네 진짜. 22")
+            SA_func = simulated_annealing_swapOp
         case _:
             raise Exception("Wrong mode.")
 
@@ -94,7 +93,7 @@ if __name__ == "__main__":
     #main_tsp2Opt(2, two_opt_FSLR)
     #main_tsp2Opt(2, two_opt_FRLS)
     #main_tspGA(2)
-    main_tspSA(2, "inverse")
+    #main_tspSA(2, "inverse")
     #main_tspSA(2, "swap")
     #main_tspSA(2, "insert")
 
