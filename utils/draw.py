@@ -12,9 +12,9 @@ def draw_path(points: list[tuple], path: list[int], distance: int | float, i: in
     for point in path:
         path_x.append(points[point][0])
         path_y.append(points[point][1])
-    """ else:
+    else:
         path_x.append(points[path[0]][0])
-        path_y.append(points[path[0]][1]) """
+        path_y.append(points[path[0]][1])
 
     plt.plot(path_x, path_y, linestyle='-', color=COLORS[i], label=f"cluster {i + 1} : {distance}")
 
