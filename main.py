@@ -92,7 +92,7 @@ if __name__ == "__main__":
     #main_tsp2Opt(2, two_opt_randomChange)
     #main_tsp2Opt(2, two_opt_FSLR)
     #main_tsp2Opt(2, two_opt_FRLS)
-    #main_tspGA(2)
+    main_tspGA(2)
     #main_tspSA(2, "inverse")
     #main_tspSA(2, "swap")
     #main_tspSA(2, "insert")

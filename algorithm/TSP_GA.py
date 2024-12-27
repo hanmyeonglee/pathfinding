@@ -14,6 +14,17 @@ def __swap(generation: np.ndarray, mask: np.ndarray | None = None):
         generation[rows, cols02], generation[rows, cols01]
     
 
+def __inverse(generation: np.ndarray):
+    n, v = generation.shape[0], generation.shape[1]
+    
+    ij = np.random.randint(0, v - 1, size=(n, 2))
+    ij.sort(axis=-1)
+    i, j = ij[:, 0], ij[:, 1]
+
+    for x in range(n):
+        generation[x, i[x]:j[x]] = np.flip(generation[x, i[x]:j[x]])
+    
+
 def __distance(dmat: np.ndarray, generation: np.ndarray) -> np.ndarray:
     return np.sum(
         dmat[generation[:, :-1], generation[:, 1:]], axis=-1
@@ -67,6 +78,7 @@ def tsp_genetic_algorithm(
 
         generation = generation[selected_parents_mask]
         __swap(generation)
+        __inverse(generation)
 
         mutated_children_mask = np.random.random(size=n_children) < mutation_probability
         __swap(generation, mask=mutated_children_mask)
