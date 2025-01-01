@@ -1,15 +1,18 @@
 from utils.random import make_random_distanceMatrix
 from utils.draw import draw_points_withPath
+
 from algorithm.TSP_GREEDY import tsp_greedy, k_tsp_greedy
 from algorithm.TSP_kOPT import two_opt_sequentialChange, two_opt_randomChange, two_opt_FRLS, two_opt_FSLR
 from algorithm.TSP_GA import tsp_genetic_algorithm
 from algorithm.TSP_SA import simulated_annealing_inverseOp, simulated_annealing_swapOp
 from algorithm.TSP_TS import tsp_tabu_search
 from algorithm.TSP_ACO import tsp_ant_colony_optimization
+
+from algorithm_GPU.TSP_GA import tsp_genetic_algorithm_gpu
 from typing import Callable
 from time import time
 
-import numpy as np
+import numpy as np, cupy as cp
 
 def main_tspGreedy(k: int):
     dmats = make_random_distanceMatrix(100, max_position=(1000, 1000), k=k)
@@ -50,7 +53,7 @@ def main_tsp2Opt(k: int, optFunc: Callable):
     draw_points_withPath(clusters, pathes, distances)
 
 def main_tspGA(k: int):
-    dmats = make_random_distanceMatrix(1000, max_position=(1000, 1000), k=k)
+    dmats = make_random_distanceMatrix(100, max_position=(1000, 1000), k=k)
 
     clusters, pathes, distances = list(), list(), list()
     for points, dmat in dmats:
@@ -145,6 +148,23 @@ def main_tspACO(k: int):
     
     draw_points_withPath(clusters, pathes, distances)
 
+def main_tspGA_GPU(k: int):
+    dmats = make_random_distanceMatrix(100, max_position=(1000, 1000), k=k)
+
+    clusters, pathes, distances = list(), list(), list()
+    for points, dmat in dmats:
+        path, _ = tsp_greedy(dmat)
+        path, dist = tsp_genetic_algorithm_gpu(
+            dmat=cp.array(dmat), path=path,
+            gen_size=2048, ggap=0.2, mutation_probability=0.05,
+            threshold=10, max_iter=5000,
+        )
+        clusters.append(points)
+        pathes.append(path)
+        distances.append(dist)
+    
+    draw_points_withPath(clusters, pathes, distances)
+
 if __name__ == "__main__":
     # 내가 짠 코드는 대칭 dmat이 기준이므로 비대칭 dmat을 사용하려면 나중에 수정이 필요함
 
@@ -166,6 +186,7 @@ if __name__ == "__main__":
     #main_tspSA(2, "swap")
     #main_tspSA(2, "insert")
     #main_tspTS(2)
-    main_tspACO(2)
+    #main_tspACO(2)
+    main_tspGA_GPU(2)
 
     pass

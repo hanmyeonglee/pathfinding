@@ -33,14 +33,11 @@ def __distance(dmat: np.ndarray, generation: np.ndarray) -> np.ndarray:
 def __roulette(distances: np.ndarray) -> np.ndarray:
     mx_distance = np.max(distances)
     mn_distance = np.min(distances)
-
-    return np.cumsum(mx_distance + mn_distance - distances)
+    return mx_distance + mn_distance - distances
 
 
 def __selection(roulette: np.ndarray, size: int) -> np.ndarray:
-    randnums = np.random.uniform(0, roulette[-1], size=size)
-    mask = np.sum(roulette <= randnums[:, None], axis=-1)
-    return mask
+    return np.random.choice(np.arange(roulette.shape[0]), size=size, p=(roulette / np.sum(roulette)))
 
 
 def tsp_genetic_algorithm(
@@ -72,8 +69,9 @@ def tsp_genetic_algorithm(
         survived_parents_indice = np.argsort(distances)[:n_parents]
         survived_parents = generation[survived_parents_indice, :]
         
-        roulette = __roulette(distances)
-        selected_parents_mask = __selection(roulette, size=n_children)
+        selected_parents_mask = __selection(
+            __roulette(distances), size=n_children
+        )
 
         generation = generation[selected_parents_mask]
         __swap(generation)
