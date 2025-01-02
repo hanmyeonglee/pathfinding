@@ -6,8 +6,8 @@ def __swap(generation: np.ndarray, mask: np.ndarray | None = None):
         mask = np.ones(shape=n, dtype=np.bool_)
 
     rows = np.arange(n)[mask]
-    cols01 = np.random.randint(0, v - 1, size=rows.shape[0])
-    cols02 = np.random.randint(0, v - 1, size=rows.shape[0])
+    cols01 = np.random.randint(0, v, size=rows.shape[0])
+    cols02 = np.random.randint(0, v, size=rows.shape[0])
 
     generation[rows, cols01], generation[rows, cols02] = \
         generation[rows, cols02], generation[rows, cols01]
@@ -16,7 +16,7 @@ def __swap(generation: np.ndarray, mask: np.ndarray | None = None):
 def __inverse(generation: np.ndarray):
     n, v = generation.shape[0], generation.shape[1]
     
-    ij = np.random.randint(0, v - 1, size=(n, 2))
+    ij = np.random.randint(0, v, size=(n, 2))
     ij.sort(axis=-1)
     i, j = ij[:, 0], ij[:, 1]
 

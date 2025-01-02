@@ -9,6 +9,8 @@ from algorithm.TSP_TS import tsp_tabu_search
 from algorithm.TSP_ACO import tsp_ant_colony_optimization
 
 from algorithm_GPU.TSP_GA import tsp_genetic_algorithm_gpu
+from algorithm_GPU.TSP_ACO import tsp_ant_colony_optimization_gpu
+
 from typing import Callable
 from time import time
 
@@ -165,6 +167,18 @@ def main_tspGA_GPU(k: int):
     
     draw_points_withPath(clusters, pathes, distances)
 
+def main_tspACO_GPU(k: int):
+    dmats = make_random_distanceMatrix(100, max_position=(1000, 1000), k=k)
+
+    clusters, pathes, distances = list(), list(), list()
+    for points, dmat in dmats:
+        path, dist = tsp_ant_colony_optimization_gpu(cp.array(dmat), *tsp_greedy(dmat), n_ants=100)
+        clusters.append(points)
+        pathes.append(path)
+        distances.append(dist)
+    
+    draw_points_withPath(clusters, pathes, distances)
+
 if __name__ == "__main__":
     # 내가 짠 코드는 대칭 dmat이 기준이므로 비대칭 dmat을 사용하려면 나중에 수정이 필요함
 
@@ -187,6 +201,7 @@ if __name__ == "__main__":
     #main_tspSA(2, "insert")
     #main_tspTS(2)
     #main_tspACO(2)
-    main_tspGA_GPU(2)
+    #main_tspGA_GPU(2)
+    main_tspACO_GPU(2)
 
     pass

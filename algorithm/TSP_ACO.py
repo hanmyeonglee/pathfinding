@@ -23,7 +23,7 @@ def tsp_ant_colony_optimization(
             unvisited = np.ones(n, dtype=np.bool_)
             index = np.arange(n)
 
-            current_point = np.random.randint(n - 1)
+            current_point = np.random.randint(n)
             unvisited[current_point] = False
             paths[ant][0] = current_point
 
