@@ -24,19 +24,16 @@ def tsp_ant_colony_optimization_gpu(
         paths[:, 0] = current_points
         unvisited[index, current_points] = False
         for i in range(1, n):
-            unvisited_points_x, unvisited_points_y = cp.where(unvisited)
-            unvisited_points_x = unvisited_points_x.reshape((n_ants, n - i))
-            unvisited_points_y = unvisited_points_y.reshape((n_ants, n - i))
+            unvisited_points = cp.where(unvisited)[1].reshape((n_ants, n - i))
 
             start_points = cp.tile(current_points, reps=(n - i, 1)).transpose()
-            roulette = (pheromone[start_points, unvisited_points_y] ** alpha) / (dmat[start_points, unvisited_points_y] ** beta)
+            roulette = (pheromone[start_points, unvisited_points] ** alpha) / (dmat[start_points, unvisited_points] ** beta)
             roulette = cp.cumsum(roulette, axis=-1)
 
-            mx_each_ants = cp.max(roulette, axis=-1)
-            randnums = cp.random.rand(n_ants) * mx_each_ants
+            randnums = cp.random.rand(n_ants) * cp.max(roulette, axis=-1)
 
             local_current_points = cp.sum(roulette <= randnums[:, None], axis=-1)
-            current_points = unvisited_points_y[cp.arange(n_ants), local_current_points]
+            current_points = unvisited_points[cp.arange(n_ants), local_current_points]
             paths[:, i] = current_points
             unvisited[index, current_points] = False
 

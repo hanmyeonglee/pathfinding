@@ -89,7 +89,7 @@ def main_tspGA_with2Opt(k: int, optFunc: Callable):
     draw_points_withPath(clusters, pathes, distances)
 
 def main_tsp2Opt_withGA(k: int, optFunc: Callable):
-    dmats = make_random_distanceMatrix(1000, max_position=(1000, 1000), k=k)
+    dmats = make_random_distanceMatrix(100, max_position=(1000, 1000), k=k)
 
     clusters, pathes, distances = list(), list(), list()
     for points, dmat in dmats:
@@ -179,6 +179,24 @@ def main_tspACO_GPU(k: int):
     
     draw_points_withPath(clusters, pathes, distances)
 
+def main_clustering_NN(k: int):
+    dmats = make_random_distanceMatrix(100, max_position=(1000, 1000), k=k, clustering_type="NN")
+
+    clusters, pathes, distances = list(), list(), list()
+    for points, dmat in dmats:
+        path, _ = tsp_greedy(dmat)
+        path, dist = tsp_genetic_algorithm(
+            dmat=dmat, path=path,
+            gen_size=256, ggap=0.2, mutation_probability=0.05,
+            threshold=10, max_iter=5000,
+        )
+        path, dist = two_opt_sequentialChange(dmat, path, dist)
+        clusters.append(points)
+        pathes.append(path)
+        distances.append(dist)
+
+    draw_points_withPath(clusters, pathes, distances)
+
 if __name__ == "__main__":
     # 내가 짠 코드는 대칭 dmat이 기준이므로 비대칭 dmat을 사용하려면 나중에 수정이 필요함
 
@@ -192,7 +210,7 @@ if __name__ == "__main__":
     #main_tspGA_with2Opt(2, two_opt_randomChange)
     #main_tspGA_with2Opt(2, two_opt_FSLR)
     #main_tspGA_with2Opt(2, two_opt_FRLS)
-    #main_tsp2Opt_withGA(2, two_opt_sequentialChange)
+    main_tsp2Opt_withGA(2, two_opt_sequentialChange)
     #main_tsp2Opt_withGA(2, two_opt_randomChange)
     #main_tsp2Opt_withGA(2, two_opt_FSLR)
     #main_tsp2Opt_withGA(2, two_opt_FRLS)
@@ -202,6 +220,7 @@ if __name__ == "__main__":
     #main_tspTS(2)
     #main_tspACO(2)
     #main_tspGA_GPU(2)
-    main_tspACO_GPU(2)
+    #main_tspACO_GPU(2)
+    main_clustering_NN(2)
 
     pass
