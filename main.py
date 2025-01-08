@@ -1,15 +1,18 @@
 from utils.random import make_random_distanceMatrix
 from utils.draw import draw_points_withPath, draw_points_withPath_withStartPoint
 
-from algorithm.TSP_GREEDY import tsp_greedy, k_tsp_greedy
-from algorithm.TSP_kOPT import two_opt_sequentialChange, two_opt_randomChange, two_opt_FRLS, two_opt_FSLR
-from algorithm.TSP_GA import tsp_genetic_algorithm
-from algorithm.TSP_SA import simulated_annealing_inverseOp, simulated_annealing_swapOp
-from algorithm.TSP_TS import tsp_tabu_search
-from algorithm.TSP_ACO import tsp_ant_colony_optimization
+from TSP.TSP_GREEDY import tsp_greedy
+from TSP.TSP_kOPT import two_opt_sequentialChange, two_opt_randomChange, two_opt_FRLS, two_opt_FSLR
+from TSP.TSP_GA import tsp_genetic_algorithm
+from TSP.TSP_SA import simulated_annealing_inverseOp, simulated_annealing_swapOp
+from TSP.TSP_TS import tsp_tabu_search
+from TSP.TSP_ACO import tsp_ant_colony_optimization
 
-from algorithm_GPU.TSP_GA import tsp_genetic_algorithm_gpu
-from algorithm_GPU.TSP_ACO import tsp_ant_colony_optimization_gpu
+from TSP_GPU.TSP_GA import tsp_genetic_algorithm_gpu
+from TSP_GPU.TSP_ACO import tsp_ant_colony_optimization_gpu
+
+from mTSP.mTSP_GREEDY import k_tsp_greedy
+from mTSP.mTSP_GA1 import mtsp_genetic_algorithm_allocation
 
 from typing import Callable
 from time import time
@@ -228,6 +231,42 @@ def main_clustering_AngleKmeans_doubleKOpt(k: int):
     draw_points_withPath(clusters, pathes, distances)
 
 
+def main_mtspNN(k: int):
+    points, dmat = make_random_distanceMatrix(100, max_position=(1000, 1000))[0]
+    routes, dists = k_tsp_greedy(dmat, k=k)
+
+    clusters, pathes, distances = list(), list(), list()
+    for path, dist in zip(routes, dists):
+        clusters.append(points)
+        pathes.append([0] + path)
+        distances.append(dist)
+
+    draw_points_withPath(clusters, pathes, distances)
+
+
+def main_mtspGA(k: int):
+    points, dmat = make_random_distanceMatrix(100, max_position=(1000, 1000))[0]
+    routes, _ = k_tsp_greedy(dmat, k=k)
+    routes, dists = mtsp_genetic_algorithm_allocation(
+        k=k,
+        dmat=dmat,
+        pathes=routes,
+        gen_size=256,
+        ggap=0.2,
+        mutation_probability=0.05,
+        threshold=10,
+        max_iter=5000,
+    )
+
+    clusters, pathes, distances = list(), list(), list()
+    for path, dist in zip(routes, dists):
+        clusters.append(points)
+        pathes.append([0] + path)
+        distances.append(dist)
+
+    draw_points_withPath(clusters, pathes, distances)
+    
+
 if __name__ == "__main__":
     # 내가 짠 코드는 대칭 dmat이 기준이므로 비대칭 dmat을 사용하려면 나중에 수정이 필요함
 
@@ -253,6 +292,9 @@ if __name__ == "__main__":
     #main_tspGA_GPU(2)
     #main_tspACO_GPU(2)
     #main_clustering_NN(2)
-    main_clustering_AngleKmeans(3)
+    #main_clustering_AngleKmeans(3)
+
+    #main_mtspNN(2)
+    main_mtspGA(2)
 
     pass
