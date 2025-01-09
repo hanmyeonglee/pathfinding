@@ -69,6 +69,9 @@ def mtsp_genetic_algorithm_allocation(
         threshold: float = 10,
         max_iter: int = 1000
     ) -> tuple[list, int | float]:
+    if k == 1:
+        raise Exception('Why you use it...?')
+
     n = dmat.shape[0] - 1
     start_point = 0
 
@@ -77,7 +80,7 @@ def mtsp_genetic_algorithm_allocation(
         for chromosome in generation:
             np.random.shuffle(chromosome)
         
-        alloc = np.random.randint(0, k, size=(gen_size, n))
+        allocator = np.random.randint(0, k, size=(gen_size, n))
     
     else:
         path = []
@@ -113,19 +116,12 @@ def mtsp_genetic_algorithm_allocation(
         
         
         roulette = __roulette(distances)
-        selected_parents_mask = __selection(
-            roulette, size=n_children
-        )
-
-        selected_allocator_mask = __selection(
-            roulette, size=(n_children, 2)
-        )
+        selected_parents_mask = __selection(roulette, size=n_children)
+        selected_allocator_mask = __selection(roulette, size=(n_children, 2))
 
 
         generation = generation[selected_parents_mask]
-        __swap(generation)
         __inverse(generation)
-
         allocator = __one_point_crossover(allocator, selected_allocator_mask)
 
 

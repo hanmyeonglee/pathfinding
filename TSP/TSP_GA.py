@@ -74,7 +74,6 @@ def tsp_genetic_algorithm(
         )
 
         generation = generation[selected_parents_mask]
-        __swap(generation)
         __inverse(generation)
 
         mutated_children_mask = np.random.random(size=n_children) < mutation_probability
