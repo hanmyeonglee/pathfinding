@@ -51,40 +51,4 @@ def tsp_ant_colony_optimization_gpu(
     
     print()
 
-    """ for iter in range(1, max_iter + 1):
-        paths = cp.zeros(shape=(n_ants, n), dtype=cp.uint16)
-        dists = cp.zeros(shape=n_ants)
-        
-        for ant in range(n_ants):
-            unvisited = cp.ones(n, dtype=cp.bool_)
-            index = cp.arange(n)
-
-            current_point = cp.random.randint(n - 1)
-            unvisited[current_point] = False
-            paths[ant][0] = current_point
-
-            for i in range(1, n):
-                unvisited_points = index[unvisited]
-                probabilties = pheromone[current_point, unvisited_points] ** alpha / dmat[current_point, unvisited_points] ** beta
-                probabilties /= cp.sum(probabilties)
-
-                next_point = cp.random.choice(unvisited_points, p=probabilties)
-                paths[ant][i] = next_point
-                dists[ant] += dmat[current_point, next_point]
-                unvisited[next_point] = False
-                current_point = next_point
-            
-            if dists[ant] < best_dist:
-                best_path = paths[ant]
-                best_dist = dists[ant]
-            
-        pheromone *= evaporation
-        for i in range(n_ants):
-            pheromone[paths[i, :-1], paths[i, 1:]] += Q / dists[i]
-            pheromone[paths[i, -1], paths[i, 0]] += Q / dists[i]
-
-        print(f"\r{iter} / {max_iter} ({iter * 100 / max_iter :.4f}%)", end="")
-    
-    print() """
-
     return best_path.tolist(), best_dist

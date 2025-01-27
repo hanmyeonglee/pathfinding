@@ -1,5 +1,6 @@
-from utils.random import make_random_distanceMatrix
-from utils.draw import draw_points_withPath, draw_points_withPath_withStartPoint
+from utils.random import make_random_distanceMatrix, make_random_trashSet
+from utils.draw import draw_points_withPath, draw_points_withPath_withStartPoint, draw_realPath
+from utils.process import make_distanceMatrix
 
 from TSP.TSP_GREEDY import tsp_greedy
 from TSP.TSP_kOPT import two_opt_sequentialChange, two_opt_randomChange, two_opt_FRLS, two_opt_FSLR
@@ -16,7 +17,6 @@ from mTSP.mTSP_GA1 import mtsp_genetic_algorithm_allocation
 from mTSP.mTSP_GA2 import mtsp_genetic_algorithm_split
 
 from typing import Callable
-from time import time
 
 import numpy as np, cupy as cp
 
@@ -244,7 +244,6 @@ def main_mtspNN(k: int):
 
     draw_points_withPath(clusters, pathes, distances)
 
-
 def main_mtspGA_allocator(k: int):
     points, dmat = make_random_distanceMatrix(100, max_position=(1000, 1000))[0]
     routes, _ = k_tsp_greedy(dmat, k=k)
@@ -266,7 +265,6 @@ def main_mtspGA_allocator(k: int):
         distances.append(dist)
 
     draw_points_withPath(clusters, pathes, distances)
-
 
 def main_mtspGA_spliter(k: int):
     points, dmat = make_random_distanceMatrix(100, max_position=(1000, 1000))[0]
@@ -293,33 +291,34 @@ def main_mtspGA_spliter(k: int):
 
 if __name__ == "__main__":
     # 내가 짠 코드는 대칭 dmat이 기준이므로 비대칭 dmat을 사용하려면 나중에 수정이 필요함
+    
+    # main_tspGreedy(2)
+    # main_tsp2Opt(2, two_opt_sequentialChange)
+    # main_tsp2Opt(2, two_opt_randomChange)
+    # main_tsp2Opt(2, two_opt_FSLR)
+    # main_tsp2Opt(2, two_opt_FRLS)
+    # main_tspGA(2)
+    # main_tspGA_with2Opt(2, two_opt_sequentialChange)
+    # main_tspGA_with2Opt(2, two_opt_randomChange)
+    # main_tspGA_with2Opt(2, two_opt_FSLR)
+    # main_tspGA_with2Opt(2, two_opt_FRLS)
+    # main_tsp2Opt_withGA(2, two_opt_sequentialChange)
+    # main_tsp2Opt_withGA(2, two_opt_randomChange)
+    # main_tsp2Opt_withGA(2, two_opt_FSLR)
+    # main_tsp2Opt_withGA(2, two_opt_FRLS)
+    # main_tspSA(2, "inverse")
+    # main_tspSA(2, "swap")
+    # main_tspSA(2, "insert")
+    # main_tspTS(2)
+    # main_tspACO(2)
+    # main_tspGA_GPU(2)
+    # main_tspACO_GPU(2)
 
-    #main_tspGreedy(2)
-    #main_tsp2Opt(2, two_opt_sequentialChange)
-    #main_tsp2Opt(2, two_opt_randomChange)
-    #main_tsp2Opt(2, two_opt_FSLR)
-    #main_tsp2Opt(2, two_opt_FRLS)
-    #main_tspGA(2)
-    #main_tspGA_with2Opt(2, two_opt_sequentialChange)
-    #main_tspGA_with2Opt(2, two_opt_randomChange)
-    #main_tspGA_with2Opt(2, two_opt_FSLR)
-    #main_tspGA_with2Opt(2, two_opt_FRLS)
-    #main_tsp2Opt_withGA(2, two_opt_sequentialChange)
-    #main_tsp2Opt_withGA(2, two_opt_randomChange)
-    #main_tsp2Opt_withGA(2, two_opt_FSLR)
-    #main_tsp2Opt_withGA(2, two_opt_FRLS)
-    #main_tspSA(2, "inverse")
-    #main_tspSA(2, "swap")
-    #main_tspSA(2, "insert")
-    #main_tspTS(2)
-    #main_tspACO(2)
-    #main_tspGA_GPU(2)
-    #main_tspACO_GPU(2)
-    #main_clustering_NN(2)
-    #main_clustering_AngleKmeans(3)
+    # main_clustering_NN(2)
+    # main_clustering_AngleKmeans(2)
 
-    #main_mtspNN(2)
-    #main_mtspGA_allocator(2)
-    main_mtspGA_spliter(2)
+    # main_mtspNN(2)
+    # main_mtspGA_allocator(2)
+    # main_mtspGA_spliter(2)
 
     pass

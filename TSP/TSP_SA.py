@@ -1,5 +1,4 @@
 from math import exp as e, log
-from copy import deepcopy
 
 import numpy as np, random
 

@@ -57,7 +57,6 @@ def tsp_tabu_search(dmat: np.ndarray, path: list[int] | None = None, stop_iter_n
             if target in tabu: continue
 
             tabu.append(target)
-            #break
 
         if len(tabu) > max_tabu_size:
             tabu = tabu[len(tabu) - max_tabu_size:]

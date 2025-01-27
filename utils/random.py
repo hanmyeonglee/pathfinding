@@ -31,3 +31,11 @@ def make_random_distanceMatrix(
         )
 
     return dmats
+
+
+def make_random_trashSet(
+        n: int,
+        avg_amount_of_garbage: int | float,
+        stdev: float
+    ) -> np.ndarray:
+    return np.random.normal(loc=avg_amount_of_garbage, scale=stdev, size=n)
